@@ -11,19 +11,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    validate: {
-      validator: (value) => {
-        // Use a regular expression to validate email format
-        // You can use a library like 'validator' for a more robust solution
-        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-      },
-      message: 'Invalid email address',
+    match: [/.+@.+\..+/],
     },
-  },
+  
   thoughts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Thought', // Reference to the "Thought" model
+      ref: 'Thought', 
     },
   ],
   friends: [
@@ -32,6 +26,17 @@ const userSchema = new mongoose.Schema({
       ref: 'User', // Self-reference to the "User" model
     },
   ],
+},
+{
+  toJSON: {
+    virtuals: true,
+  },
+  id: false,
+}
+);
+
+UserSchema.virtual("friendCount").get(function () {
+return this.friends.length;
 });
 
 const User = mongoose.model('User', userSchema);
