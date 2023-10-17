@@ -17,7 +17,9 @@ const userController =  {
     .catch((err) => res.status(500).json(err));
   },
   async createUser(req, res) {
-
+    User.create(req.body)
+    .then((dbUserData) => res.json(dbUserData))
+    .catch((err) => res.status(500).json(err));
   },
   async updateUser(req, res) {
 
