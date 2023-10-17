@@ -22,7 +22,20 @@ const userController =  {
     .catch((err) => res.status(500).json(err));
   },
   async updateUser(req, res) {
-
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: 'No User with this id!' })
+          : res.json(user)
+      )
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
   },
   async deleteUser(req, res) {
 
