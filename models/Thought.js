@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ReactionSchema = new Schema(
+const reactionSchema = new Schema(
   {
     reactionId: {
       // Mongoose's ObjectId data type
