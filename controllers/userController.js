@@ -38,7 +38,24 @@ const userController =  {
       });
   },
   async deleteUser(req, res) {
-
+    User.findOneAndRemove({ _id: req.params.userId })
+    .then((user) =>
+      !user
+        ? res.status(404).json({ message: 'No User with this id!' })
+        : User.findOneAndUpdate(
+            { users: req.params.userId },
+            { $pull: { Users: req.params.userId } },
+            { new: true }
+          )
+    )
+    .then((user) =>
+      !user
+        ? res
+            .status(404)
+            .json({ message: 'User created but no user with this id!' })
+        : res.json({ message: 'User successfully deleted!' })
+    )
+    .catch((err) => res.status(500).json(err));
   },
   async addFriend(req, res) {
 
